@@ -1,0 +1,151 @@
+.header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.search-form {
+  width: 100%;
+  max-width: 850px;
+}
+
+.search-label {
+  width: 100%;
+  max-width: 500px;
+  height: 44px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e6e6e6;
+  border-radius: 22px;
+  padding-left: 22px;
+  padding-right: 35px;
+}
+
+.search-button {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  width: 22px;
+  height: 22px;
+}
+
+.title-wrapper {
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.news {
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+.news-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 270px);
+  justify-content: space-evenly;
+  gap: 40px 20px;
+}
+
+.news-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.news-image {
+  width: 100%;
+  height: 270px;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+.news-link {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 10px;
+  background-image: url('../image/arrow.svg');
+  background-repeat: no-repeat;
+  background-position: top right;
+  padding-right: 30px;
+  transition: color .3s ease-in-out;
+}
+
+.news-link:hover {
+  color: #09E079;
+}
+
+.news-description {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.news-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #8e8e8e;
+}
+
+.news-datetime {
+  display: flex;
+}
+
+.news-date {
+  margin-right: 20px;
+}
+
+.footer {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.footer-logo {
+  justify-self: start;
+  align-self: center;
+}
+
+.copyright {
+  justify-self: center;
+  align-self: end;
+  font-size: 12px;
+}
+
+.social-list {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  align-self: center;
+  gap: 15px;
+}
+
+.social-link {
+  display: block;
+  width: 30px;
+  height: 30px;
+  color: #09E079;
+}
