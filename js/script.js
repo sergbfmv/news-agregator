@@ -1,6 +1,8 @@
 const API_KEY = 'ba265851592f45518d14e27538ede190'
 const newsList = document.querySelector('.news-list')
 const choiceElement = document.querySelector('.js-choice')
+const formSearch = document.querySelector('.search-form')
+const title = document.querySelector('.title')
 const choices = new Choices(choiceElement, {
   searchEnabled: false,
   itemSelectText: '',
@@ -19,24 +21,42 @@ async function getData(url) {
   return data
 }
 
+function getDateCorrectFormat(isoDate) {
+  const date = new Date(isoDate)
+
+  const fullDate = date.toLocaleString('en-GB', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric'
+  })
+
+  const fullTime = date.toLocaleString('en-GB', {
+    hour: 'numeric',
+    minute: 'numeric',
+  })
+
+  return `<span class="new-date">${fullDate}</span> ${fullTime}`
+}
+
 function renderCard(data) {
   newsList.textContent = ''
 
   data.forEach(news => {
+    const {urlToImage, title, url, description, publishedAt, author} = news
     const card = document.createElement('li')
     card.className = 'news-item'
     card.innerHTML = `
-      <img class="news-image" src="${news.urlToImage}" alt="${news.title}" width="270" height="200">
+      <img class="news-image" src="${urlToImage}" alt="${title}" width="270" height="200">
       <h3 class="news-title">
-        <a href="${news.url}" class="news-link" target="_blank">${news.title}</a>
+        <a href="${url}" class="news-link" target="_blank">${title || ''}</a>
       </h3>
-      <p class="news-description">${news.description}.</p>
+      <p class="news-description">${description || ''}.</p>
 
       <div class="news-footer">
-        <time class="news-datetime" datetime="${news.publishedAt}">
-          <span class="news-date">${news.publishedAt}</span> 11:06
+        <time class="news-datetime" datetime="${publishedAt}">
+          ${getDateCorrectFormat(publishedAt)}
         </time>
-        <div class="news-author">${news.author}</div>
+        <div class="news-author">${author || ''}</div>
       </div>
     `
 
@@ -44,9 +64,36 @@ function renderCard(data) {
   });
 }
 
-async function loadData() {
-  const data = await getData('https://newsapi.org/v2/top-headlines?country=ru')
+async function loadNews() {
+  newsList.innerHTML = `
+    <li class="preload"></li>
+  `
+  const country = localStorage.getItem('country') || 'ru'
+  choices.setChoiceByValue(country)
+  title.classList.add('hide')
+  
+  const data = await getData(`https://newsapi.org/v2/top-headlines?country=${country}&pageSize=100`)
   renderCard(data.articles)
 }
 
-loadData()
+async function loadSearch(value) {
+  const data = await getData(`https://newsapi.org/v2/everything?q=${value}&pageSize=100`)
+  title.classList.remove('hide')
+  title.textContent = `По вашему запросу “${value}” найдено ${data.articles.length} результатов`
+  choices.setChoiceByValue('')
+  renderCard(data.articles)
+}
+
+choiceElement.addEventListener('change', (e) => {
+  const value = e.detail.value
+  localStorage.setItem('country', value)
+  loadNews()
+})
+
+formSearch.addEventListener('submit', (e) => {
+  e.preventDefault()
+  loadSearch(formSearch.search.value)
+  formSearch.reset()
+})
+
+loadNews()
