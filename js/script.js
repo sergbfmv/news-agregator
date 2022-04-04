@@ -35,18 +35,40 @@ function getDateCorrectFormat(isoDate) {
     minute: 'numeric',
   })
 
-  return `<span class="new-date">${fullDate}</span> ${fullTime}`
+  return `<span class="news-date">${fullDate}</span> ${fullTime}`
 }
+
+const getImage = (url) => new Promise((resolve) => {
+  const image = new Image(270, 200)
+
+  image.addEventListener('load', () => {
+    resolve(image)
+  })
+
+  image.addEventListener('error', () => {
+    image.src = 'image/nophoto.jpg'
+    resolve(image)
+  })
+
+  image.src = url || 'image/nophoto.jpg'
+  image.className = 'news-image'
+
+  return image
+})
 
 function renderCard(data) {
   newsList.textContent = ''
 
-  data.forEach(news => {
+  data.forEach(async news => {
     const {urlToImage, title, url, description, publishedAt, author} = news
     const card = document.createElement('li')
     card.className = 'news-item'
-    card.innerHTML = `
-      <img class="news-image" src="${urlToImage}" alt="${title}" width="270" height="200">
+
+    const image = await getImage(urlToImage)
+    image.alt = title
+    card.append(image)
+
+    card.innerHTML += `
       <h3 class="news-title">
         <a href="${url}" class="news-link" target="_blank">${title || ''}</a>
       </h3>
