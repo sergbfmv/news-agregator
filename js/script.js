@@ -9,6 +9,9 @@ const choices = new Choices(choiceElement, {
   position: 'bottom',
 })
 
+const declOfNum = (n, titles) => titles[n % 10 === 1 && n % 100 !== 11 ?
+  0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2];
+
 async function getData(url) {
   const response = await fetch(url, {
     headers: {
@@ -99,9 +102,15 @@ async function loadNews() {
 }
 
 async function loadSearch(value) {
+  newsList.innerHTML = `
+  <li class="preload"></li>
+`
   const data = await getData(`https://newsapi.org/v2/everything?q=${value}&pageSize=100`)
   title.classList.remove('hide')
-  title.textContent = `По вашему запросу “${value}” найдено ${data.articles.length} результатов`
+  const find = ['найден', 'найдено', 'найдено']
+  const res = ['результат', 'результата', 'результатов']
+  const count = data.articles.length
+  title.textContent = `По вашему запросу “${value}” ${declOfNum(count, find)} ${count} ${declOfNum(count, res)}`
   choices.setChoiceByValue('')
   renderCard(data.articles)
 }
